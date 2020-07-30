@@ -27,7 +27,7 @@ const (
 	maxRetries = 2
 
 	// healthReadyTimeout define the maximum duration to wait for vault to become initialized and unsealed
-	healthRetryTimeout = 10 * time.Minute
+	healthRetryTimeout = 20 * time.Minute
 
 	// healthInitialRetryDelay define the initial delay before starting the retries
 	healthInitialRetryDelay = 10 * time.Second
@@ -167,7 +167,7 @@ func (v *VaultClientFactory) createClient(config *api.Config, vaultConfig vault.
 	log.Logger().Debugf("Connecting to vault on %s", vaultClient.Address())
 	err = waitForVault(vaultClient, healthInitialRetryDelay, healthRetryTimeout)
 	if err != nil {
-		return nil, errors.Wrap(err, "wait for vault to be initialized and unsealed")
+		return nil, errors.Wrap(err, "waiting for vault to be initialized and unsealed")
 	}
 
 	token, err := getTokenFromVault(vaultConfig.ServiceAccountName, jwt, vaultConfig.KubernetesAuthPath, vaultClient, authRetryTimeout)
